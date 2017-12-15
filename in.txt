@@ -1,0 +1,53 @@
+int @valoare1;
+int @valoare1();
+char @ert();
+char @ert(char @eg4, float @fdafe);
+char @ert(char @eg4, float @fdafe); char @erdsadasadt(char @asdasdeg4, float @fdadadasde);
+
+const int @fava;
+#define @CONST_VAL 1024
+
+class @afafe
+{ 
+public:
+int @argsdfsd;
+}
+
+class @fafefe
+{
+public:
+int @rssdaf;
+float @afesrs;
+private:
+int @adfads;
+public:
+char @asad;
+int @afsddsfds(char @asfafa);
+}
+
+int @array[2];
+char @string [3];
+int @matrix  [5][5];
+
+begin_progr
+@valoare1 := 33;
+@x := 3 + 5;
+@y := @t - 6;
+@u := @h / @r;
+@a := 3 + @g + 4;
+@a := 3 * @g / 4;
+@a := 3 * @g - 4;
+@a := 3 + @g + 4;
+@a := 3 * @g / 4;
+@a := 3 + @g + 4;
+
+@ert();
+@trart();
+
+int @array  [2];
+char @string [3];
+int @matrix  [5][5];
+
+if(3 > 2) @asd := @asda;
+
+end_progr
