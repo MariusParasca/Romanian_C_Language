@@ -25,6 +25,8 @@ char @asad;
 int @afsddsfds(char @asfafa);
 }
 
+print(3);
+
 int @array[2];
 char @string [3];
 int @matrix  [5][5];
@@ -41,6 +43,8 @@ begin_progr
 @a := 3 * @g / 4;
 @a := 3 + @g + 4;
 
+print(7);
+
 @ert();
 @trart();
 
@@ -48,6 +52,61 @@ int @array  [2];
 char @string [3];
 int @matrix  [5][5];
 
+
 if(3 > 2) @asd := @asda;
+
+if(4 < 5)
+{
+	@sbc := @a;
+	@a := 2;
+	if(3 > 2) @asd := @asda;
+	while(1 > 2) @sd:= @f;
+}
+else
+{
+	@sbc := @a;
+}
+else
+{
+	@sbc := @a;
+	@sbc := @a < @b ? @a : @b;
+}
+
+while(1 > 2) 
+{
+	@sd:= @f;
+	if(3 > 2) @asd := @asda;
+	@a := 2;
+}
+
+for(@i := 0; @i < 2; @i := @i + 1)
+	@array[@i] := @a;
+for(@i := 0; @i < 2; @i := @i + 1)
+{
+	@array := @a;
+	@a := 2;
+}
+
+do
+{
+	for(@i := 0; @i < 2; @i := @i + 1)
+	@array := @a;
+}while( @a < 3);
+
+str_length(@string2);
+str_length(~adasdsaASfafAFdsAFAS);
+str_lower(~21212asdasdsAFfsef);
+str_upper(~assdgshq21AASDZDF);
+
+str_copy(~aasdfghgfd,~adfsgdre);
+str_concat(@string1,@string2);
+str_compare(~sae2ea,@string2);
+
+@afdfa := !(@fdsff < 213);
+@jtbgf := (@asfsa > 213) && (131 == 123);
+@fdsfj := (@asfsa > 213) && (131 == 123) && (131 == 123);
+@afad := (@asfsa > 213) && (131 == 123) || !(123 <= @afeaf);
+
+@afrbhy := 2 + (@sdfsrf + 3424 - (@afrg / @afsss));
 
 end_progr
