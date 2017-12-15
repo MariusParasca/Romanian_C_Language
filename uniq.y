@@ -11,7 +11,7 @@ printf("eroare: %s la linia:%d\n",s,yylineno);
 }
 
 %}
-%token ID TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE FOR OPPL PRNT STGOPP1 STGOPP2 STRG LGC LGC1
+%token ID TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
 %start progr
 %%
 progr: declaratii bloc {printf("program corect sintactic\n");}
@@ -66,12 +66,13 @@ list :  statement ';'
 
 /* instructiune */
 statement: ID ASSIGN var 
-         | ID ASSIGN questionMarkOperator     
+         | ID ASSIGN questionMarkOperator
+         | ID '(' ')'		
          | ID '(' lista_apel ')'
+         | ID ASSIGN ID '(' lista_apel ')'
          | ID ASSIGN operation
          | CST TIP ID
          | DFN ID NR
-         | TIP ID dimensions ASSIGN var
          | ID dimensions ASSIGN var
          | TIP ID dimensions
          | PRNT '(' NR ')'
@@ -93,6 +94,7 @@ booleanexpr : LGC1 '(' expression ')'
 controlStatement: IF '(' expression ')' statement ';'
                 | IF '(' expression ')' '{' blockOfStatements '}' 
                 | IF '(' expression ')' '{' blockOfStatements '}' ifElse
+                | SWITCH '(' ID ')' '{' statementsForSwitch '}'
                 | WHILE '(' expression ')' statement ';'
                 | WHILE '(' expression ')' '{' blockOfStatements '}'
                 | FOR '(' statement ';' expression ';' statement ')' statement ';'
@@ -104,6 +106,7 @@ questionMarkOperator: expression '?' var ':' var
 
 ifElse: ELSE '{' blockOfStatements '}'
       | ifElse  ELSE '{' blockOfStatements '}'
+<<<<<<< HEAD
         
 blockOfStatements : statement ';'
                   | blockOfStatements statement ';'
@@ -119,13 +122,19 @@ operation : var OPP var
           | '(' var OPP operation ')'
           ;
 
+statementsForSwitch : 'c''a''s''e' NR ':' statement ';'
+                    | 'c''a''s''e' NR ':' statement ';' statementsForSwitch
+                    | 'd''e''f''a''u''l''t' ':' statement ';'
+                    ;
+
 var : ID 
     | NR
     ;
 
-lista_apel : NR
-           | lista_apel ',' NR
-           |
+lista_apel : var
+           | ID '(' lista_apel ')'
+           | lista_apel ',' var
+           | lista_apel ',' ID '(' lista_apel ')'
            ;
 %%
 

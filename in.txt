@@ -31,6 +31,10 @@ int @array[2];
 char @string [3];
 int @matrix  [5][5];
 
+int @array  [2];
+char @string [3];
+int @matrix  [5][5];
+
 begin_progr
 @valoare1 := 33;
 @x := 3 + 5;
@@ -48,9 +52,6 @@ print(7);
 @ert();
 @trart();
 
-int @array  [2];
-char @string [3];
-int @matrix  [5][5];
 
 
 if(3 > 2) @asd := @asda;
@@ -72,7 +73,7 @@ else
 	@sbc := @a < @b ? @a : @b;
 }
 
-while(1 > 2) 
+while(1 > 2 && @a > @b || !@A && @a > @b) 
 {
 	@sd:= @f;
 	if(3 > 2) @asd := @asda;
@@ -108,5 +109,15 @@ str_compare(~sae2ea,@string2);
 @afad := (@asfsa > 213) && (131 == 123) || !(123 <= @afeaf);
 
 @afrbhy := 2 + (@sdfsrf + 3424 - (@afrg / @afsss));
+
+@function(@a, 2, 3);
+@abc := @function(@al, 3, @functino(2, 3), @f);
+
+switch (@a)
+{
+	case 1: @a := 1;
+	case 2: @a := 2;
+	default: @a := 0;
+}
 
 end_progr

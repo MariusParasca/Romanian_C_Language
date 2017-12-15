@@ -21,6 +21,7 @@
 "&&"|"||" {return LGC;}
 "!" {return LGC1;}
 "~"[a-zA-Z0-9]* {return STRG;}
+"switch" {return SWITCH;}
 @[_a-zA-Z][_a-zA-Z0-9]* {return ID;}
 ":=" {return ASSIGN;}
 "+"|"-"|"*"|"/" {return OPP;}
