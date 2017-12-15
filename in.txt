@@ -29,6 +29,10 @@ int @array[2];
 char @string [3];
 int @matrix  [5][5];
 
+int @array  [2];
+char @string [3];
+int @matrix  [5][5];
+
 begin_progr
 @valoare1 := 33;
 @x := 3 + 5;
@@ -44,10 +48,55 @@ begin_progr
 @ert();
 @trart();
 
-int @array  [2];
-char @string [3];
-int @matrix  [5][5];
 
 if(3 > 2) @asd := @asda;
+
+if(4 < 5)
+{
+	@sbc := @a;
+	@a := 2;
+	if(3 > 2) @asd := @asda;
+	while(1 > 2) @sd:= @f;
+}
+else
+{
+	@sbc := @a;
+}
+else
+{
+	@sbc := @a;
+	@sbc := @a < @b ? @a : @b;
+}
+
+while(1 > 2 && @a > @b || !@A && @a > @b) 
+{
+	@sd:= @f;
+	if(3 > 2) @asd := @asda;
+	@a := 2;
+}
+
+for(@i := 0; @i < 2; @i := @i + 1)
+	@array[@i] := @a;
+for(@i := 0; @i < 2; @i := @i + 1)
+{
+	@array := @a;
+	@a := 2;
+}
+
+do
+{
+	for(@i := 0; @i < 2; @i := @i + 1)
+	@array := @a;
+}while( @a < 3);
+
+@function(@a, 2, 3);
+@abc := @function(@al, 3, @functino(2, 3), @f);
+
+switch (@a)
+{
+	case 1: @a := 1;
+	case 2: @a := 2;
+	default: @a := 0;
+}
 
 end_progr
