@@ -54,14 +54,13 @@ print(7);
 
 
 
-if(3 > 2) @asd := @asda;
+if((@a > @b || @a < @c) || !((@b == @c && (@a > @b || @a < @c)) || @a < @c)) @asd := @asda;
 
-if(4 < 5)
+if((4 < 5))
 {
 	@sbc := @a;
 	@a := 2;
-	if(3 > 2) @asd := @asda;
-	while(1 > 2) @sd:= @f;
+	if((3 > 2)) @asd := @asda;
 }
 else
 {
@@ -73,7 +72,7 @@ else
 	@sbc := @a < @b ? @a : @b;
 }
 
-while(1 > 2 && @a > @b || !@A && @a > @b) 
+while(1 > 2 && @a > @b) 
 {
 	@sd:= @f;
 	if(3 > 2) @asd := @asda;
@@ -107,6 +106,7 @@ str_compare(~sae2ea,@string2);
 @jtbgf := (@asfsa > 213) && (131 == 123);
 @fdsfj := (@asfsa > 213) && (131 == 123) && (131 == 123);
 @afad := (@asfsa > 213) && (131 == 123) || !(123 <= @afeaf);
+@fa  := @asfsa > 213;
 
 @afrbhy := 2 + (@sdfsrf + 3424 - (@afrg / @afsss));
 

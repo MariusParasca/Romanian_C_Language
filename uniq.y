@@ -11,65 +11,62 @@ printf("eroare: %s la linia:%d\n",s,yylineno);
 }
 
 %}
-%token ID TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
+%token ID TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
 %start progr
 %%
-progr: declaratii bloc {printf("program corect sintactic\n");}
+progr: declarations block {printf("program corect sintactic\n");}
      ;
 
-declaratii : declaratie ';'
-           | declaratii declaratie ';'
-           | DFN ID NR
-           | declaratii DFN ID NR
-           | CLS ID '{' class_statements '}'
-           | declaratii CLS ID '{' class_statements '}'
-           | PRNT '(' NR ')' ';'
-           | declaratii PRNT '(' NR ')' ';'
-           ;
+declarations : declaration ';'
+             | declarations declaration ';'
+             | DFN ID NR
+             | declarations DFN ID NR
+             | CLS ID '{' classStatements '}'
+             | declarations CLS ID '{' classStatements '}'
+             | PRNT '(' NR ')' ';'
+             | declarations PRNT '(' NR ')' ';'
+             ;
 
-class_statements : ACSP ':' class_declaratie 
-                 | class_statements ACSP ':' class_declaratie
+classStatements : ACSP ':' classDeclaration 
+                | classStatements ACSP ':' classDeclaration
+                ;
 
-class_declaratie : declaratie ';'
-                 | class_declaratie declaratie ';'
+classDeclaration : declaration ';'
+                 | classDeclaration declaration ';'
+                 ;
 
-declaratie : TIP ID 
-           | TIP ID '(' lista_param ')'
-           | TIP ID '(' ')'
-           | CST TIP ID
-           | TIP ID dimensions
-           ;
+declaration : TIP ID 
+            | TIP ID '(' paramList ')'
+            | TIP ID '(' ')'
+            | CST TIP ID
+            | TIP ID dimensions
+            ;
 
-dimensions : '[' NR ']'
-           | dimensions '[' NR ']'
-           | '[' ID ']'
-           | dimensions '[' ID ']'
+dimensions : '[' var ']'
+           | dimensions '[' var ']'
            ; 
 
-lista_param : param
-            | lista_param ',' param 
-            ;
+paramList : param
+          | paramList ',' param 
+          ;
             
 param : TIP ID
       ; 
       
-/* bloc */
-bloc : BGIN list END  
-     ;
+block : BGIN list END  
+      ;
      
-/* lista instructiuni */
 list :  statement ';' 
      | list statement ';'
      | controlStatement
      | list controlStatement
      ;
 
-/* instructiune */
 statement: ID ASSIGN var 
          | ID ASSIGN questionMarkOperator
          | ID '(' ')'		
-         | ID '(' lista_apel ')'
-         | ID ASSIGN ID '(' lista_apel ')'
+         | ID '(' callList ')'
+         | ID ASSIGN ID '(' callList ')'
          | ID ASSIGN operation
          | CST TIP ID
          | DFN ID NR
@@ -83,18 +80,32 @@ statement: ID ASSIGN var
          | STGOPP2 '(' ID ',' STRG ')'
          | STGOPP2 '(' ID ',' ID ')'
          | ID ASSIGN booleanexpr
+         | ID ASSIGN expression
          ;
 
 booleanexpr : LGC1 '(' expression ')'
             | LGC1 '(' booleanexpr ')'
-            | '(' expression ')' LGC '(' expression ')'
+            | '(' expression ')'
+            | '(' booleanexpr ')'
+            | '(' booleanexpr ')' LGC booleanexpr
+            | '(' booleanexpr ')' LGC expression  
             | '(' expression ')' LGC booleanexpr
+            | expression LGC expression
+            | expression LGC booleanexpr
             ;
 
-controlStatement: IF '(' expression ')' statement ';'
+controlStatement: IF '(' booleanexpr ')' statement ';'
+                | IF '(' booleanexpr ')' '{' blockOfStatements '}' 
+                | IF '(' booleanexpr ')' '{' blockOfStatements '}' ifElse
+                | SWITCH '(' ID ')' '{' statementsForSwitch '}'
+                | WHILE '(' booleanexpr ')' statement ';'
+                | WHILE '(' booleanexpr ')' '{' blockOfStatements '}'
+                | FOR '(' statement ';' booleanexpr ';' statement ')' statement ';'
+                | FOR '(' statement ';' booleanexpr ';' statement ')' '{' blockOfStatements '}'
+                | DO '{' blockOfStatements '}' WHILE '(' booleanexpr ')' ';'
+                | IF '(' expression ')' statement ';'
                 | IF '(' expression ')' '{' blockOfStatements '}' 
                 | IF '(' expression ')' '{' blockOfStatements '}' ifElse
-                | SWITCH '(' ID ')' '{' statementsForSwitch '}'
                 | WHILE '(' expression ')' statement ';'
                 | WHILE '(' expression ')' '{' blockOfStatements '}'
                 | FOR '(' statement ';' expression ';' statement ')' statement ';'
@@ -103,10 +114,11 @@ controlStatement: IF '(' expression ')' statement ';'
                 ;
 
 questionMarkOperator: expression '?' var ':' var 
+                    ;
 
 ifElse: ELSE '{' blockOfStatements '}'
       | ifElse  ELSE '{' blockOfStatements '}'
-<<<<<<< HEAD
+      ;
         
 blockOfStatements : statement ';'
                   | blockOfStatements statement ';'
@@ -115,6 +127,7 @@ blockOfStatements : statement ';'
                   ;
 
 expression : var OPPL var
+           ;
 
 operation : var OPP var 
           | var OPP operation
@@ -122,20 +135,20 @@ operation : var OPP var
           | '(' var OPP operation ')'
           ;
 
-statementsForSwitch : 'c''a''s''e' NR ':' statement ';'
-                    | 'c''a''s''e' NR ':' statement ';' statementsForSwitch
-                    | 'd''e''f''a''u''l''t' ':' statement ';'
+statementsForSwitch : CASE NR ':' statement ';'
+                    | CASE NR ':' statement ';' statementsForSwitch
+                    | DEFAULT ':' statement ';'
                     ;
 
 var : ID 
     | NR
     ;
 
-lista_apel : var
-           | ID '(' lista_apel ')'
-           | lista_apel ',' var
-           | lista_apel ',' ID '(' lista_apel ')'
-           ;
+callList : var
+         | ID '(' callList ')'
+         | callList ',' var
+         | callList ',' ID '(' callList ')'
+         ;
 %%
 
 int main(int argc, char** argv){
