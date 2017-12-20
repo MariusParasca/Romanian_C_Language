@@ -11,7 +11,7 @@ printf("eroare: %s la linia:%d\n",s,yylineno);
 }
 
 %}
-%token ID TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
+%token ID FNCTID CLSID TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
 %start progr
 %%
 progr: declarations block {printf("program corect sintactic\n");}
@@ -21,8 +21,8 @@ declarations : declaration ';'
              | declarations declaration ';'
              | DFN ID NR
              | declarations DFN ID NR
-             | CLS ID '{' classStatements '}'
-             | declarations CLS ID '{' classStatements '}'
+             | CLS CLSID '{' classStatements '}'
+             | declarations CLS CLSID '{' classStatements '}'
              | PRNT '(' NR ')' ';'
              | declarations PRNT '(' NR ')' ';'
              ;
@@ -36,8 +36,8 @@ classDeclaration : declaration ';'
                  ;
 
 declaration : TIP ID 
-            | TIP ID '(' paramList ')'
-            | TIP ID '(' ')'
+            | TIP FNCTID '(' paramList ')'
+            | TIP FNCTID '(' ')'
             | CST TIP ID
             | TIP ID dimensions
             ;
@@ -64,9 +64,9 @@ list :  statement ';'
 
 statement: ID ASSIGN var 
          | ID ASSIGN questionMarkOperator
-         | ID '(' ')'		
-         | ID '(' callList ')'
-         | ID ASSIGN ID '(' callList ')'
+         | FNCTID '(' ')'		
+         | FNCTID '(' callList ')'
+         | ID ASSIGN FNCTID '(' callList ')'
          | ID ASSIGN operation
          | CST TIP ID
          | DFN ID NR
@@ -145,9 +145,9 @@ var : ID
     ;
 
 callList : var
-         | ID '(' callList ')'
+         | FNCTID '(' callList ')'
          | callList ',' var
-         | callList ',' ID '(' callList ')'
+         | callList ',' FNCTID '(' callList ')'
          ;
 %%
 

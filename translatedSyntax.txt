@@ -1,0 +1,33 @@
+"int"   |"float"   |"char"    |"string"|"double"     |"long"
+"intreg"|"rational"|"caracter"|"convoi"|"maiRational"|"rationalLung"
+
+begin_progr - "incepem" 
+end_prog - "terminam" 
+constanta - constanta
+#define - "#definitie"
+class - "grup"
+
+"public"  |"private" 
+"acesibil"|"confidential"
+
+if - "daca"
+else - "dacaNu" 
+do -"actioneaza"
+while - "catTimp"
+for - "ciclu"
+print - "striga"
+
+"str_length"   |"str_lower"     |"str_upper"
+"lungimeConvoi"|"minusculConvoi"|"majusculConvoi"
+
+"str_copy"   |"str_concat"       |"str_compare"
+"copieConvoi"|"concatenareConvoi"|"comparareConvoi" 
+
+"&&"|"||" 
+"SI"|"SAU"
+
+! - "NEG" 
+switch - "selecteaza"
+case - "caz"
+default - "implicit"
+assign - "->"

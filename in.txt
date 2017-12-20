@@ -1,123 +1,109 @@
-int @valoare1;
-int @valoare1();
-char @ert();
-char @ert(char @eg4, float @fdafe);
-char @ert(char @eg4, float @fdafe); char @erdsadasadt(char @asdasdeg4, float @fdadadasde);
+intreg $valoareIntreaga1;
+intreg $valoareIntreaga2;
+maiRational $valoareMaiRational1;
+intreg @functie1();
+intreg $a;
+intreg $b;
+intreg $c;
+intreg $i;
+caracter @functie2();
+caracter @functie3(caracter $caracter1, rational $valoareRationala1);
 
-const int @fava;
-#define @CONST_VAL 1024
+constanta intreg $constanta1;
+#defineste $definit	23
 
-class @afafe
-{ 
-public:
-int @argsdfsd;
+grup #clasa1
+{
+accesibil:
+	intreg $intreg1DinClasa1;
+	rational $rational1DinClasa1;
+confidential:
+	intreg $intreg2DinClasa1;
+accesibil:
+	caracter $caracter1DinClasa1;
+	intreg @functieDinClasa1(caracter $caracter1);
 }
 
-class @fafefe
-{
-public:
-int @rssdaf;
-float @afesrs;
-private:
-int @adfads;
-public:
-char @asad;
-int @afsddsfds(char @asfafa);
-}
+striga(3);
 
-print(3);
+intreg $vector[2];
+caracter $sir[3];
+intreg $matrice[5][5];
 
-int @array[2];
-char @string [3];
-int @matrix  [5][5];
+incepem
+	$valoareIntreaga1 -> 33;
+	$valoareIntreaga2 -> 3 + 5;
+	$valoareIntreaga1 -> $valoareIntreaga2 - 6;
+	$valoareIntreaga1 -> $valoareIntreaga1 / $valoareIntreaga2;
 
-int @array  [2];
-char @string [3];
-int @matrix  [5][5];
+	striga(7);
 
-begin_progr
-@valoare1 := 33;
-@x := 3 + 5;
-@y := @t - 6;
-@u := @h / @r;
-@a := 3 + @g + 4;
-@a := 3 * @g / 4;
-@a := 3 * @g - 4;
-@a := 3 + @g + 4;
-@a := 3 * @g / 4;
-@a := 3 + @g + 4;
+	@functie1();
 
-print(7);
+	daca(($a > $b SAU $a < 3) SAU NEG(($b == $c SI ($a > $b SAU $a < $c)) SAU $a < $c)) 
+		$a -> $b;
+	
 
-@ert();
-@trart();
+	daca((4 < 5))
+	{
+		$a -> $a;
+		$a -> 2;
+		daca((3 > 2)) 
+			$c -> $a;
+	}
+	dacaNu
+	{
+		$a -> $b;
+	}
+	dacaNu
+	{
+		$a -> $a < $b ? $a : $b;
+	}
 
+	catTimp(1 > 2 SI $a > $b) 
+	{
+		daca(3 > 2) 
+			$a -> $c;
+		$a -> 2;
+	}
 
+	ciclu($i -> 0; $i < 2; $i -> $i + 1)
+		$vector[$i] -> $a;
 
-if((@a > @b || @a < @c) || !((@b == @c && (@a > @b || @a < @c)) || @a < @c)) @asd := @asda;
+	ciclu($i -> 0; $i < 2; $i -> $i + 1)
+	{
+		$a -> 2;
+	}
 
-if((4 < 5))
-{
-	@sbc := @a;
-	@a := 2;
-	if((3 > 2)) @asd := @asda;
-}
-else
-{
-	@sbc := @a;
-}
-else
-{
-	@sbc := @a;
-	@sbc := @a < @b ? @a : @b;
-}
+	actioneaza
+	{
+		ciclu($i -> 0; $i < 2; $i -> $i + 1)
+			$vector[$i] -> $a;
+		
+	}catTimp($a < 3);
 
-while(1 > 2 && @a > @b) 
-{
-	@sd:= @f;
-	if(3 > 2) @asd := @asda;
-	@a := 2;
-}
+	lungimeConvoi($sir);
+	lungimeConvoi(~adasdsaASfafAFdsAFAS);
+	minusculConvoi(~a21212asdasdsAFfsef);
+	majusculConvoi(~assdgshq21AASDZDF);
 
-for(@i := 0; @i < 2; @i := @i + 1)
-	@array[@i] := @a;
-for(@i := 0; @i < 2; @i := @i + 1)
-{
-	@array := @a;
-	@a := 2;
-}
+	copieConvoi(~aasdfghgfd,~adfsgdre);
+	concatenareConvoi($string1,$string2);
+	comparareConvoi(~sae2ea, $string2);
 
-do
-{
-	for(@i := 0; @i < 2; @i := @i + 1)
-	@array := @a;
-}while( @a < 3);
+	$a -> NEG($b < 213);
+	$b -> ($a > 213) SI (131 == 123);
 
-str_length(@string2);
-str_length(~adasdsaASfafAFdsAFAS);
-str_lower(~21212asdasdsAFfsef);
-str_upper(~assdgshq21AASDZDF);
+	$a -> 2 + ($b + 3424 - ($c / $a));
 
-str_copy(~aasdfghgfd,~adfsgdre);
-str_concat(@string1,@string2);
-str_compare(~sae2ea,@string2);
+	@functie1($a, 2, 3);
+	$a -> @fucntie1($a, 3, @funcite2(2, 3), $a);
 
-@afdfa := !(@fdsff < 213);
-@jtbgf := (@asfsa > 213) && (131 == 123);
-@fdsfj := (@asfsa > 213) && (131 == 123) && (131 == 123);
-@afad := (@asfsa > 213) && (131 == 123) || !(123 <= @afeaf);
-@fa  := @asfsa > 213;
+	selecteaza ($a)
+	{
+		caz 1: $a -> 1;
+		caz 2: $a -> 2;
+		implicit: $a -> 0;
+	}
 
-@afrbhy := 2 + (@sdfsrf + 3424 - (@afrg / @afsss));
-
-@function(@a, 2, 3);
-@abc := @function(@al, 3, @functino(2, 3), @f);
-
-switch (@a)
-{
-	case 1: @a := 1;
-	case 2: @a := 2;
-	default: @a := 0;
-}
-
-end_progr
+terminam

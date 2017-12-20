@@ -3,29 +3,31 @@
 #include "y.tab.h"
 %}
 %%
-"int"|"float"|"char"|"string"|"double"|"long" {return TIP;}
-"begin_progr" {return BGIN;}
-"end_progr" {return END;}
-"const" {return CST;}
-"#define" {return DFN;}
-"class" {return CLS;}
-"public"|"private" {return ACSP;}
-"if" {return IF;}
-"else" {return ELSE;}
-"do" {return DO;}
-"while" {return WHILE;}
-"for" {return FOR;}
-"print" {return PRNT;}
-"str_length"|"str_lower"|"str_upper" {return STGOPP1; }
-"str_copy"|"str_concat"|"str_compare" {return STGOPP2; }
-"&&"|"||" {return LGC;}
-"!" {return LGC1;}
+"intreg"|"rational"|"caracter"|"convoi"|"maiRational"|"rationalLung" {return TIP;}
+"incepem" {return BGIN;}
+"terminam" {return END;}
+"constanta" {return CST;}
+"#defineste" {return DFN;}
+"grup" {return CLS;}
+"accesibil"|"confidential" {return ACSP;}
+"daca" {return IF;}
+"dacaNu" {return ELSE;}
+"actioneaza" {return DO;}
+"catTimp" {return WHILE;}
+"ciclu" {return FOR;}
+"striga" {return PRNT;}
+"lungimeConvoi"|"minusculConvoi"|"majusculConvoi" {return STGOPP1; }
+"copieConvoi"|"concatenareConvoi"|"comparareConvoi" {return STGOPP2; }
+"SI"|"SAU" {return LGC;}
+"NEG" {return LGC1;}
 "~"[a-zA-Z0-9]* {return STRG;}
-"switch" {return SWITCH;}
-"case" {return CASE;}
-"default" {return DEFAULT;}
-@[_a-zA-Z][_a-zA-Z0-9]* {return ID;}
-":=" {return ASSIGN;}
+"selecteaza" {return SWITCH;}
+"caz" {return CASE;}
+"implicit" {return DEFAULT;}
+"$"[_a-zA-Z][_a-zA-Z0-9]* {return ID;}
+"@"[_a-zA-Z][_a-zA-Z0-9]* {return FNCTID;}
+"#"[_a-zA-Z][_a-zA-Z0-9]* {return CLSID;}
+"->" {return ASSIGN;}
 "+"|"-"|"*"|"/" {return OPP;}
 "<"|">"|"=="|"!="|">="|"<=" {return OPPL;}
 [0-9]+ {return NR;}
