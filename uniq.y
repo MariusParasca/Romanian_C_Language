@@ -20,11 +20,8 @@ progr: declarations block {printf("program corect sintactic\n");}
 declarations : declaration ';'
              | declarations declaration ';'
              | DFN ID NR
-             | declarations DFN ID NR
              | CLS CLSID '{' classStatements '}'
-             | declarations CLS CLSID '{' classStatements '}'
              | PRNT '(' NR ')' ';'
-             | declarations PRNT '(' NR ')' ';'
              ;
 
 classStatements : ACSP ':' classDeclaration 
