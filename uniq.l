@@ -24,8 +24,8 @@
 "selecteaza" {return SWITCH;}
 "caz" {return CASE;}
 "implicit" {return DEFAULT;}
-"$"[_a-zA-Z][_a-zA-Z0-9]* {yylval.idval=strdup(yytext); return ID;}
-"@"[_a-zA-Z][_a-zA-Z0-9]* {return FNCTID;}
+"$"[_a-zA-Z][_a-zA-Z0-9]* {yylval.idval=strdup(yytext); yylval.typefnct=strdup(yytext); return ID;}
+"@"[_a-zA-Z][_a-zA-Z0-9]* {yylval.typefnct=strdup(yytext); return FNCTID;}
 "#"[_a-zA-Z][_a-zA-Z0-9]* {return CLSID;}
 "->" {return ASSIGN;}
 "+"|"-"|"*"|"/" {return OPP;}

@@ -9,7 +9,10 @@ intreg $d;
 intreg $i;
 
 caracter @functie2();
+intreg @functie5();
 caracter @functie3(caracter $caracter1, rational $valoareRationala1);
+intreg @functie4(caracter $dafsdf);
+intreg @functie4(caracter $dafsdf, intreg $dafsdf2);
 
 convoi $string1;
 convoi $string2;
@@ -27,7 +30,7 @@ confidential:
 	intreg $intreg2DinClasa1;
 accesibil:
 	caracter $caracter1DinClasa1;
-	intreg @functieDinClasa1(caracter $caracter1);
+	intreg @functieDinClasa1();
 }
 
 striga(3);
@@ -42,7 +45,7 @@ incepem
 	$valoareIntreaga1 -> $valoareIntreaga2 - 6;
 	$valoareIntreaga1 -> $valoareIntreaga1 / $valoareIntreaga2;
 
-	
+
 
 	striga(7);
 

@@ -6,19 +6,32 @@ extern char* yytext;
 extern int yylineno;
 
 typedef struct var{
-  char *id;
-  char *type;
+  char* id;
+  char* type;
   int initialized;  /* 1 - initialized explicitly; 0 - not initialized explicitly AKA ID in stanga*/
 }var;
 
 var allVariables[100];
 int noVariable = 0;
 
+typedef struct function{
+  char* idFnct;
+  char* typeFnct;
+  int noParam;
+  char* paramtypeVal[100];
+}function;
+
+function allFunctions[100];
+int noFunctions = 0;
+
 int yylex();
 
 int yyerror(char * s){
 printf("eroare: %s la linia:%d\n",s,yylineno);
 }
+
+int tempNoParams = 0;
+char* tempTypeFunct[100];
 
 %}
 
@@ -28,11 +41,14 @@ printf("eroare: %s la linia:%d\n",s,yylineno);
 }
 
 %union{
-  
+  char* typefnct;
+  char* idfnct;
 }
 
-%token <idval>ID FNCTID CLSID <typeval>TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
+%token <idval>ID <idfnct>FNCTID CLSID <typefnct><typeval>TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
 %start progr
+
+%type <noParam>paramList
 
 %%
 progr: declarations block {printf("program corect sintactic\n");}
@@ -71,8 +87,53 @@ declaration : TIP ID {
                        allVariables[noVariable] = tempvar;
                        noVariable++;
                        }
-            | TIP FNCTID '(' paramList ')'
-            | TIP FNCTID '(' ')'
+            | TIP FNCTID '(' { tempNoParams = 0; memset(tempTypeFunct,0,sizeof(tempTypeFunct)); } paramList ')'{
+                                          for(int i = 0; i < noFunctions; i++){
+                                            if ( strcmp( allFunctions[i].idFnct, $2) == 0){
+                                              if ( allFunctions[i].noParam == tempNoParams){
+                                                int diffParamTypes = 0;
+                                                for(int j = 0; j < tempNoParams; j++){
+                                                  if( strcmp( allFunctions[i].paramtypeVal[j], tempTypeFunct[j] ) == 0){
+                                                    diffParamTypes++;
+                                                  }
+                                                }
+                                                if(diffParamTypes == tempNoParams){
+                                                  printf("[Eroare] linia %d : functia %s a fost deja definita cu aceasta signatura\n", yylineno, $2);
+                                                  YYERROR;
+                                                }
+
+                                              }
+                                            }
+                                          }
+                                          function tempFunction;
+                                          tempFunction.idFnct = $2;
+                                          tempFunction.typeFnct = $1;
+                                          tempFunction.noParam = tempNoParams;
+                                          printf("Funct %d : %s %s ( ", noFunctions, tempFunction.typeFnct, tempFunction.idFnct);
+                                          for(int i = 0; i < tempNoParams; i++){
+                                            tempFunction.paramtypeVal[i] = tempTypeFunct[i];
+                                            printf("%s ", tempTypeFunct[i]);
+                                          }
+                                          printf(")\n");
+                                          allFunctions[noFunctions] = tempFunction;
+                                          noFunctions++;
+                                          }
+            | TIP FNCTID '(' ')'{
+                                  for (int i = 0; i < noFunctions; ++i){
+                                    if( strcmp( allFunctions[i].idFnct, $2) == 0){
+                                      printf("[Eroare] linia %d : functia %s a fost deja definita\n", yylineno, $2);
+                                      YYERROR;
+                                    }
+                                  }
+
+                                  function tempFunction;
+                                  tempFunction.idFnct = $2;
+                                  tempFunction.typeFnct = $1;
+                                  tempFunction.noParam = 0;
+                                  printf("Funct %d : %s %s ()\n", noFunctions, tempFunction.typeFnct, tempFunction.idFnct);
+                                  allFunctions[noFunctions] = tempFunction;
+                                  noFunctions++;
+                                }
             | CST TIP ID
             | TIP ID dimensions{ 
                                 for(int i = 0; i < noVariable; i++){
@@ -95,12 +156,9 @@ dimensions : '[' var ']'
            | dimensions '[' var ']'
            ; 
 
-paramList : param
-          | paramList ',' param 
+paramList : TIP ID { tempTypeFunct[tempNoParams] = $1; tempNoParams++;}
+          | paramList ',' TIP ID { tempTypeFunct[tempNoParams] = $3; tempNoParams++;} 
           ;
-            
-param : TIP ID
-      ; 
       
 block : BGIN list END  
       ;
