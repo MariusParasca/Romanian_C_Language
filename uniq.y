@@ -8,7 +8,7 @@ extern int yylineno;
 typedef struct var{
   char *id;
   char *type;
-  int defined;
+  int initialized;  /* 1 - initialized explicitly; 0 - not initialized explicitly AKA ID in stanga*/
 }var;
 
 var allVariables[100];
@@ -62,7 +62,7 @@ declaration : TIP ID {
                        var tempvar; 
                        tempvar.id = $2;
                        tempvar.type = $1;
-                       tempvar.defined = 0;
+                       tempvar.initialized = 0;
                        printf("Var %d : %s %s\n",noVariable,tempvar.type, tempvar.id);
                        allVariables[noVariable] = tempvar;
                        noVariable++;
@@ -80,7 +80,7 @@ declaration : TIP ID {
                                  var tempvar; 
                                  tempvar.id = $2;
                                  tempvar.type = $1;
-                                 tempvar.defined = 0;
+                                 tempvar.initialized = 0;
                                  printf("Var %d : %s %s\n",noVariable,tempvar.type, tempvar.id);
                                  allVariables[noVariable] = tempvar;
                                  noVariable++;
@@ -111,7 +111,8 @@ statement: ID ASSIGN var {
                           int isDefined = 0;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
-                              isDefined = 1;    
+                              isDefined = 1;
+                              allVariables[i].initialized = 1;    
                             }
                           }
                           if(isDefined == 0){
@@ -125,7 +126,8 @@ statement: ID ASSIGN var {
                           int isDefined = 0;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
-                              isDefined = 1;    
+                              isDefined = 1;
+                              allVariables[i].initialized = 1;     
                             }
                           }
                           if(isDefined == 0){
@@ -137,7 +139,8 @@ statement: ID ASSIGN var {
                           int isDefined = 0;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
-                              isDefined = 1;    
+                              isDefined = 1;
+                              allVariables[i].initialized = 1;     
                             }
                           }
                           if(isDefined == 0){
@@ -151,7 +154,8 @@ statement: ID ASSIGN var {
                           int isDefined = 0;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
-                              isDefined = 1;    
+                              isDefined = 1;
+                              allVariables[i].initialized = 1;     
                             }
                           }
                           if(isDefined == 0){
@@ -224,7 +228,8 @@ statement: ID ASSIGN var {
                           int isDefined = 0;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
-                              isDefined = 1;    
+                              isDefined = 1;
+                              allVariables[i].initialized = 1;     
                             }
                           }
                           if(isDefined == 0){
@@ -236,7 +241,8 @@ statement: ID ASSIGN var {
                           int isDefined = 0;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
-                              isDefined = 1;    
+                              isDefined = 1;
+                              allVariables[i].initialized = 1;     
                             }
                           }
                           if(isDefined == 0){
@@ -315,13 +321,20 @@ var : ID {
           int isDefined = 0;
           for(int i = 0; i < noVariable; i++){
             if( strcmp(allVariables[i].id,$1) == 0 ){
-            isDefined = 1;    
+              isDefined = 1;
+              if( allVariables[i].initialized == 0){
+                printf("[Eroare] linia %d : %s nu a fost initializata\n", yylineno, $1 );
+                YYERROR;
+              }    
             }
           }
           if(isDefined == 0){
             printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
             YYERROR;
           }
+
+
+
          }
     | NR
     ;

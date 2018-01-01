@@ -5,6 +5,7 @@ intreg @functie1();
 intreg $a;
 intreg $b;
 intreg $c;
+intreg $d;
 intreg $i;
 
 caracter @functie2();
@@ -45,6 +46,11 @@ incepem
 
 	@functie1();
 
+	$a -> 432;
+	$b -> 32;
+	$c -> 1312;
+	$c -> $d;
+
 	daca(($a > $b SAU $a < 3) SAU NEG(($b == $c SI ($a > $b SAU $a < $c)) SAU $a < $c)) 
 		$a -> $b;
 	
@@ -59,10 +65,6 @@ incepem
 	dacaNu
 	{
 		$a -> $b;
-	}
-	dacaNu
-	{
-		$a -> $a < $b ? $a : $b;
 	}
 
 	catTimp(1 > 2 SI $a > $b) 
