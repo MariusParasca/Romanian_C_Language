@@ -188,6 +188,21 @@ statement: ID ASSIGN ID {
                             YYERROR;
                           }
 
+                          isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$3) == 0 ){
+                              isDefined = 1;
+                              if( allVariables[i].initialized == 0){
+                                printf("[Eroare] linia %d : %s nu a fost initializata\n", yylineno, $3 );
+                                YYERROR;
+                              }    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $3);
+                            YYERROR;
+                          }
+
                           char* typeVal2;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$3) == 0 ){
@@ -275,6 +290,7 @@ statement: ID ASSIGN ID {
 
                                   if(isDefined = 0){
                                     printf("[Eroare] linia %d : functia %s nu a fost definita \n", yylineno, $1);
+                                    YYERROR;
                                   } 
                                   }
          | ID ASSIGN FNCTID '(' callList ')' { 

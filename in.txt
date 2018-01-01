@@ -50,6 +50,8 @@ incepem
 	$valoareIntreaga1 -> $valoareIntreaga2 - 6;
 	$valoareIntreaga1 -> $valoareIntreaga1 / $valoareIntreaga2;
 
+	$valoareIntreaga1 -> $valoareIntreaga2; 
+
 	$intreg1 -> 46455;
 	$rational1 -> 2412;
 	$valoareMaiRational1 -> 3424324;
@@ -69,9 +71,11 @@ incepem
 
 	@functie1();
 
+
 	$a -> 432;
 	$b -> 32;
 	$c -> 1312;
+	$d -> 32423;
 	$c -> $d;
 
 	daca(($a > $b SAU $a < 3) SAU NEG(($b == $c SI ($a > $b SAU $a < $c)) SAU $a < $c)) 
