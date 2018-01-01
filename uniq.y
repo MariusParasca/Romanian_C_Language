@@ -27,6 +27,10 @@ printf("eroare: %s la linia:%d\n",s,yylineno);
   char* idval;
 }
 
+%union{
+  
+}
+
 %token <idval>ID FNCTID CLSID <typeval>TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
 %start progr
 
@@ -107,18 +111,47 @@ list : statement ';'
      | list controlStatement
      ;
 
-statement: ID ASSIGN var { 
+statement: ID ASSIGN ID { 
                           int isDefined = 0;
+                          char* typeVal1;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
                               isDefined = 1;
-                              allVariables[i].initialized = 1;    
+                              allVariables[i].initialized = 1; 
+                              typeVal1 = strdup(allVariables[i].type);
                             }
                           }
                           if(isDefined == 0){
                             printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
                             YYERROR;
                           }
+
+                          char* typeVal2;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$3) == 0 ){
+                              typeVal2 = strdup(allVariables[i].type);
+                            }
+                          }
+
+                          if(strcmp(typeVal1, typeVal2) != 0){
+                            printf("[Eroare] linia %d : %s e tip diferit de %s\n", yylineno, typeVal1, typeVal2);
+                            YYERROR;
+                          }
+
+                         }
+         | ID ASSIGN NR { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;
+                              allVariables[i].initialized = 1; 
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+
                          }
          | FNCTID '(' ')'		
          | FNCTID '(' callList ')'

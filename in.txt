@@ -42,6 +42,8 @@ incepem
 	$valoareIntreaga1 -> $valoareIntreaga2 - 6;
 	$valoareIntreaga1 -> $valoareIntreaga1 / $valoareIntreaga2;
 
+	
+
 	striga(7);
 
 	@functie1();
