@@ -55,7 +55,7 @@ classDeclaration : declaration ';'
 declaration : TIP ID { 
                       for(int i = 0; i < noVariable; i++){
                         if( strcmp(allVariables[i].id,$2) == 0 ){
-                          printf("[Eroare] %s este deja folosit\n",allVariables[i].id);
+                          printf("[Eroare] linia %d : %s este deja folosit\n",yylineno, allVariables[i].id);
                           YYERROR;
                           }
                        }
@@ -73,7 +73,7 @@ declaration : TIP ID {
             | TIP ID dimensions{ 
                                 for(int i = 0; i < noVariable; i++){
                                   if( strcmp(allVariables[i].id,$2) == 0 ){
-                                    printf("[Eroare] %s este deja folosit\n",allVariables[i].id);
+                                    printf("[Eroare] linia %d : %s este deja folosit\n",yylineno, allVariables[i].id);
                                     YYERROR;
                                     }
                                  }
@@ -107,25 +107,155 @@ list : statement ';'
      | list controlStatement
      ;
 
-statement: ID ASSIGN var 
-         | ID ASSIGN questionMarkOperator
+statement: ID ASSIGN var { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+                         }
+         | ID ASSIGN questionMarkOperator { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+                         }
          | FNCTID '(' ')'		
          | FNCTID '(' callList ')'
-         | ID ASSIGN FNCTID '(' callList ')'
-         | ID ASSIGN operation
+         | ID ASSIGN FNCTID '(' callList ')' { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+                         }
+         | ID ASSIGN operation { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+                         }
          | CST TIP ID
          | DFN ID NR
-         | ID dimensions ASSIGN var
-         | TIP ID dimensions
+         | ID dimensions ASSIGN var { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+                         }
          | PRNT '(' NR ')'
          | STGOPP1 '(' STRG ')'
-         | STGOPP1 '(' ID ')'
+         | STGOPP1 '(' ID ')' { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$3) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $3);
+                            YYERROR;
+                          }
+                         }
          | STGOPP2 '(' STRG ',' STRG ')'
-         | STGOPP2 '(' STRG ',' ID ')'
-         | STGOPP2 '(' ID ',' STRG ')'
-         | STGOPP2 '(' ID ',' ID ')'
-         | ID ASSIGN booleanexpr
-         | ID ASSIGN expression
+         | STGOPP2 '(' STRG ',' ID ')' { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$5) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $5);
+                            YYERROR;
+                          }
+                         }
+         | STGOPP2 '(' ID ',' STRG ')' { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$3) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $3);
+                            YYERROR;
+                          }
+                         }
+         | STGOPP2 '(' ID ',' ID ')' { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if (strcmp(allVariables[i].id,$3) == 0) {
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $3);
+                            YYERROR;
+                          }
+                          int isDefined2 = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if (strcmp(allVariables[i].id,$5) == 0) {
+                              isDefined2 = 1;    
+                            }
+                          }
+                          if(isDefined2 == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $5);
+                            YYERROR;
+                          }
+                         }
+         | ID ASSIGN booleanexpr { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+                         }
+         | ID ASSIGN expression { 
+                          int isDefined = 0;
+                          for(int i = 0; i < noVariable; i++){
+                            if( strcmp(allVariables[i].id,$1) == 0 ){
+                              isDefined = 1;    
+                            }
+                          }
+                          if(isDefined == 0){
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+                         }
          ;
 
 booleanexpr : LGC1 '(' expression ')'
@@ -142,7 +272,18 @@ booleanexpr : LGC1 '(' expression ')'
 controlStatement: IF '(' booleanexpr ')' statement ';'
                 | IF '(' booleanexpr ')' '{' blockOfStatements '}' 
                 | IF '(' booleanexpr ')' '{' blockOfStatements '}' ifElse
-                | SWITCH '(' ID ')' '{' statementsForSwitch '}'
+                | SWITCH '(' ID ')' '{' statementsForSwitch '}' { 
+                                                                  int isDefined = 0;
+                                                                  for(int i = 0; i < noVariable; i++){
+                                                                    if( strcmp(allVariables[i].id,$3) == 0 ){
+                                                                    isDefined = 1;    
+                                                                    }
+                                                                  }
+                                                                  if(isDefined == 0){
+                                                                    printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $3);
+                                                                    YYERROR;
+                                                                  }
+                                                                 }
                 | WHILE '(' booleanexpr ')' statement ';'
                 | WHILE '(' booleanexpr ')' '{' blockOfStatements '}'
                 | FOR '(' statement ';' booleanexpr ';' statement ')' statement ';'
@@ -185,7 +326,18 @@ statementsForSwitch : CASE NR ':' statement ';'
                     | DEFAULT ':' statement ';'
                     ;
 
-var : ID 
+var : ID { 
+          int isDefined = 0;
+          for(int i = 0; i < noVariable; i++){
+            if( strcmp(allVariables[i].id,$1) == 0 ){
+            isDefined = 1;    
+            }
+          }
+          if(isDefined == 0){
+            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+            YYERROR;
+          }
+         }
     | NR
     ;
 
