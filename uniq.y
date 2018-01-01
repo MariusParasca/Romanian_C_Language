@@ -119,18 +119,6 @@ statement: ID ASSIGN var {
                             YYERROR;
                           }
                          }
-         | ID ASSIGN questionMarkOperator { 
-                          int isDefined = 0;
-                          for(int i = 0; i < noVariable; i++){
-                            if( strcmp(allVariables[i].id,$1) == 0 ){
-                              isDefined = 1;    
-                            }
-                          }
-                          if(isDefined == 0){
-                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
-                            YYERROR;
-                          }
-                         }
          | FNCTID '(' ')'		
          | FNCTID '(' callList ')'
          | ID ASSIGN FNCTID '(' callList ')' { 
@@ -298,9 +286,6 @@ controlStatement: IF '(' booleanexpr ')' statement ';'
                 | FOR '(' statement ';' expression ';' statement ')' '{' blockOfStatements '}'
                 | DO '{' blockOfStatements '}' WHILE '(' expression ')' ';'
                 ;
-
-questionMarkOperator: expression '?' var ':' var 
-                    ;
 
 ifElse: ELSE '{' blockOfStatements '}'
       | ifElse  ELSE '{' blockOfStatements '}'
