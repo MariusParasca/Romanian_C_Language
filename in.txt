@@ -5,6 +5,7 @@ intreg @functie1();
 intreg $a;
 intreg $b;
 intreg $c;
+intreg $c;
 intreg $i;
 caracter @functie2();
 caracter @functie3(caracter $caracter1, rational $valoareRationala1);

@@ -3,7 +3,7 @@
 #include "y.tab.h"
 %}
 %%
-"intreg"|"rational"|"caracter"|"convoi"|"maiRational"|"rationalLung" {return TIP;}
+"intreg"|"rational"|"caracter"|"convoi"|"maiRational"|"rationalLung" {yylval.typeval=strdup(yytext); return TIP;}
 "incepem" {return BGIN;}
 "terminam" {return END;}
 "constanta" {return CST;}
@@ -24,7 +24,7 @@
 "selecteaza" {return SWITCH;}
 "caz" {return CASE;}
 "implicit" {return DEFAULT;}
-"$"[_a-zA-Z][_a-zA-Z0-9]* {return ID;}
+"$"[_a-zA-Z][_a-zA-Z0-9]* {yylval.idval=strdup(yytext); return ID;}
 "@"[_a-zA-Z][_a-zA-Z0-9]* {return FNCTID;}
 "#"[_a-zA-Z][_a-zA-Z0-9]* {return CLSID;}
 "->" {return ASSIGN;}

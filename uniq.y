@@ -1,8 +1,18 @@
 %{
 #include <stdio.h>
+#include <string.h>
 extern FILE* yyin;
 extern char* yytext;
 extern int yylineno;
+
+typedef struct var{
+  char *id;
+  char *type;
+  int defined;
+}var;
+
+var allVariables[100];
+int noVariable = 0;
 
 int yylex();
 
@@ -11,8 +21,15 @@ printf("eroare: %s la linia:%d\n",s,yylineno);
 }
 
 %}
-%token ID FNCTID CLSID TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
+
+%union{
+  char* typeval;
+  char* idval;
+}
+
+%token <idval>ID FNCTID CLSID <typeval>TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
 %start progr
+
 %%
 progr: declarations block {printf("program corect sintactic\n");}
      ;
@@ -20,8 +37,11 @@ progr: declarations block {printf("program corect sintactic\n");}
 declarations : declaration ';'
              | declarations declaration ';'
              | DFN ID NR
+             | declarations DFN ID NR
              | CLS CLSID '{' classStatements '}'
+             | declarations CLS CLSID '{' classStatements '}'
              | PRNT '(' NR ')' ';'
+             | declarations PRNT '(' NR ')' ';'
              ;
 
 classStatements : ACSP ':' classDeclaration 
@@ -32,11 +52,39 @@ classDeclaration : declaration ';'
                  | classDeclaration declaration ';'
                  ;
 
-declaration : TIP ID 
+declaration : TIP ID { 
+                      for(int i = 0; i < noVariable; i++){
+                        if( strcmp(allVariables[i].id,$2) == 0 ){
+                          printf("[Eroare] %s este deja folosit\n",allVariables[i].id);
+                          YYERROR;
+                          }
+                       }
+                       var tempvar; 
+                       tempvar.id = $2;
+                       tempvar.type = $1;
+                       tempvar.defined = 0;
+                       printf("Var %d : %s %s\n",noVariable,tempvar.type, tempvar.id);
+                       allVariables[noVariable] = tempvar;
+                       noVariable++;
+                       }
             | TIP FNCTID '(' paramList ')'
             | TIP FNCTID '(' ')'
             | CST TIP ID
-            | TIP ID dimensions
+            | TIP ID dimensions{ 
+                                for(int i = 0; i < noVariable; i++){
+                                  if( strcmp(allVariables[i].id,$2) == 0 ){
+                                    printf("[Eroare] %s este deja folosit\n",allVariables[i].id);
+                                    YYERROR;
+                                    }
+                                 }
+                                 var tempvar; 
+                                 tempvar.id = $2;
+                                 tempvar.type = $1;
+                                 tempvar.defined = 0;
+                                 printf("Var %d : %s %s\n",noVariable,tempvar.type, tempvar.id);
+                                 allVariables[noVariable] = tempvar;
+                                 noVariable++;
+                                 }
             ;
 
 dimensions : '[' var ']'
@@ -53,7 +101,7 @@ param : TIP ID
 block : BGIN list END  
       ;
      
-list :  statement ';' 
+list : statement ';' 
      | list statement ';'
      | controlStatement
      | list controlStatement
