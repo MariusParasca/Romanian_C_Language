@@ -33,6 +33,8 @@ printf("eroare: %s la linia:%d\n",s,yylineno);
 int tempNoParams = 0;
 char* tempTypeFunct[100];
 
+char* numberType = "number";
+
 %}
 
 %union{
@@ -121,8 +123,10 @@ declaration : TIP ID {
             | TIP FNCTID '(' ')'{
                                   for (int i = 0; i < noFunctions; ++i){
                                     if( strcmp( allFunctions[i].idFnct, $2) == 0){
-                                      printf("[Eroare] linia %d : functia %s a fost deja definita\n", yylineno, $2);
-                                      YYERROR;
+                                      if( allFunctions[i].noParam == 0){
+                                        printf("[Eroare] linia %d : functia %s a fost deja definita\n", yylineno, $2);
+                                        YYERROR;
+                                      }
                                     }
                                   }
 
@@ -211,8 +215,68 @@ statement: ID ASSIGN ID {
                           }
 
                          }
-         | FNCTID '(' ')'		
-         | FNCTID '(' callList ')'
+         | FNCTID '(' ')'	{
+                          int isDefined = 0, withParam = 0;
+                          for (int i = 0; i < noFunctions; ++i)
+                          {
+                            if( strcmp(allFunctions[i].idFnct, $1) == 0 ){
+                              if( allFunctions[i].noParam == 0){
+                                isDefined = 1;
+                              }else{
+                                withParam = 1;
+                              }
+                            }
+                          }
+
+                          if( ( isDefined == 0 ) && ( withParam == 1 ) ){
+                            printf("[Eroare] linia %d : %s a fost definita dar ai uitat parametrii\n", yylineno, $1);
+                            YYERROR; 
+                          }
+
+                          if( isDefined == 0) {
+                            printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                            YYERROR;
+                          }
+
+                          }
+         | FNCTID '(' { tempNoParams = 0; memset(tempTypeFunct,0,sizeof(tempTypeFunct)); } callList ')'{
+                                    int isDefined = 0, equalNoParam = 0;
+                                    for (int i = 0; i < noFunctions; ++i)
+                                    {
+                                      if( strcmp(allFunctions[i].idFnct, $1) == 0 ){
+                                        isDefined = 1;
+                                        if( tempNoParams == allFunctions[i].noParam ){
+                                          equalNoParam = 1;
+                                          int diffParamTypes = 0;
+                                          for(int j = 0; j < tempNoParams; j++){
+                                            if( strcmp( allFunctions[i].paramtypeVal[j], tempTypeFunct[j] ) == 0){
+                                              diffParamTypes++;
+                                            }
+                                            if( strcmp(allFunctions[i].paramtypeVal[j], "caracter") != 0 ){
+                                              if ( strcmp(allFunctions[i].paramtypeVal[j], "convoi") != 0 ){
+                                                if ( strcmp(tempTypeFunct[j], "number") == 0 ){
+                                                  diffParamTypes++;
+                                                }
+                                              }
+                                            }
+                                          }
+                                          if(diffParamTypes < tempNoParams){
+                                            printf("[Eroare] linia %d : functia %s este definita, numarul parametrilor coincide dar nu si tipul\n", yylineno, $1);
+                                            YYERROR;
+                                          }
+                                        }
+                                      } 
+                                    }
+
+                                  if ((isDefined = 1) && (equalNoParam == 0)){
+                                    printf("[Eroare] linia %d : functia %s este definta dar neceista alt numar de parametri\n", yylineno, $1);
+                                    YYERROR;
+                                  }
+
+                                  if(isDefined = 0){
+                                    printf("[Eroare] linia %d : functia %s nu a fost definita \n", yylineno, $1);
+                                  } 
+                                  }
          | ID ASSIGN FNCTID '(' callList ')' { 
                           int isDefined = 0;
                           for(int i = 0; i < noVariable; i++){
@@ -343,6 +407,63 @@ statement: ID ASSIGN ID {
                          }
          ;
 
+callList : ID { 
+                int isDefined = 0, isInitialized = 0;
+                for(int i = 0; i < noVariable; i++){
+                  if( strcmp(allVariables[i].id,$1) == 0 ){
+                    isDefined = 1;
+                    if( allVariables[i].initialized == 1 ){
+                      isInitialized = 1;
+                      tempTypeFunct[tempNoParams] = allVariables[i].type; 
+                      tempNoParams++;
+                    }
+                  }
+                }
+
+                if( ( isDefined == 1 ) && ( isInitialized == 0 ) ){
+                  printf("[Eroare] linia %d : %s este definita dar nu a fost initializata\n", yylineno, $1);
+                  YYERROR; 
+                }
+
+                if( isDefined == 0){
+                    printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
+                    YYERROR;
+                }
+                
+              }
+         | NR {
+                tempTypeFunct[tempNoParams] = numberType;
+                tempNoParams++;
+              }
+         | callList ',' ID { 
+                            int isDefined = 0, isInitialized = 0;
+                            for(int i = 0; i < noVariable; i++){
+                              if( strcmp(allVariables[i].id,$3) == 0 ){
+                                isDefined = 1;
+                                if( allVariables[i].initialized == 1 ){
+                                  isInitialized = 1;
+                                  tempTypeFunct[tempNoParams] = allVariables[i].type; 
+                                  tempNoParams++;
+                                }
+                              }
+                            }
+
+                            if( ( isDefined == 1 ) && ( isInitialized == 0 ) ){
+                              printf("[Eroare] linia %d : %s este definita dar nu a fost initializata\n", yylineno, $3);
+                              YYERROR; 
+                            }
+
+                            if( isDefined == 0){
+                                printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $3);
+                                YYERROR;
+                            }
+                          }
+         | callList ',' NR {
+                            tempTypeFunct[tempNoParams] = numberType;
+                            tempNoParams++;
+                           }
+         ;
+
 booleanexpr : LGC1 '(' expression ')'
             | LGC1 '(' booleanexpr ')'
             | '(' expression ')'
@@ -423,18 +544,9 @@ var : ID {
             printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
             YYERROR;
           }
-
-
-
          }
     | NR
     ;
-
-callList : var
-         | FNCTID '(' callList ')'
-         | callList ',' var
-         | callList ',' FNCTID '(' callList ')'
-         ;
 %%
 
 int main(int argc, char** argv){

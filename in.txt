@@ -7,12 +7,17 @@ intreg $b;
 intreg $c;
 intreg $d;
 intreg $i;
+intreg $intreg1;
+rational $rational1;
+rationalLung $rationalLung1;
 
 caracter @functie2();
 intreg @functie5();
-caracter @functie3(caracter $caracter1, rational $valoareRationala1);
-intreg @functie4(caracter $dafsdf);
+caracter @functie3(intreg $intreg1, rational $valoareRationala1);
+intreg @functie4(maiRational $dafsdf);
 intreg @functie4(caracter $dafsdf, intreg $dafsdf2);
+intreg @functie4();
+rationalLung @functie6(intreg $intreg1, rational $rational, rationalLung $rationalLung); 
 
 convoi $string1;
 convoi $string2;
@@ -45,7 +50,20 @@ incepem
 	$valoareIntreaga1 -> $valoareIntreaga2 - 6;
 	$valoareIntreaga1 -> $valoareIntreaga1 / $valoareIntreaga2;
 
+	$intreg1 -> 46455;
+	$rational1 -> 2412;
+	$valoareMaiRational1 -> 3424324;
+	$rationalLung1 -> 15153;
 
+	@functie6($intreg1, $rational1, $rationalLung1);
+
+	@functie6(2131, 123123, 121412);
+
+	@functie4($valoareMaiRational1);
+
+	@functie3($intreg1,$rational1);
+
+	@functie4();
 
 	striga(7);
 
@@ -110,8 +128,7 @@ incepem
 
 	$a -> 2 + ($b + 3424 - ($c / $a));
 
-	@functie1($a, 2, 3);
-	$a -> @fucntie1($a, 3, @funcite2(2, 3), $a);
+	@functie1();
 
 	selecteaza ($a)
 	{
