@@ -6,6 +6,7 @@ extern char* yytext;
 extern int yylineno;
 
 typedef struct var{
+  int val;
   char* id;
   char* type;
   int initialized;  /* 1 - initialized explicitly; 0 - not initialized explicitly AKA ID in stanga*/
@@ -35,9 +36,21 @@ char* tempTypeFunct[100];
 
 char* numberType = "number";
 
+int tempVal;
+
+int valPrint[100];
+int noValPrint = 0;
+
+void printFnct(){
+  for(int i = 0; i < noValPrint; ++i){
+    printf("%d\n", valPrint[i]);
+  }
+}
+
 %}
 
 %union{
+  int intval;
   char* typeval;
   char* idval;
 }
@@ -47,13 +60,19 @@ char* numberType = "number";
   char* idfnct;
 }
 
-%token <idval>ID <idfnct>FNCTID CLSID <typefnct><typeval>TIP BGIN END ASSIGN NR OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
+%union{
+  char* operation;
+}
+
+%token <idval>ID <idfnct>FNCTID CLSID <typefnct><typeval>TIP BGIN END ASSIGN <intval>NR <operation>OPP CST DFN CLS ACSP IF ELSE DO WHILE SWITCH CASE DEFAULT FOR OPPL OPPLE PRNT STGOPP1 STGOPP2 STRG LGC LGC1 
 %start progr
 
+%left OPP
 %type <noParam>paramList
+%type <intval>var
 
 %%
-progr: declarations block {printf("program corect sintactic\n");}
+progr: declarations block {printf("program corect sintactic\n"); printFnct(); }
      ;
 
 declarations : declaration ';'
@@ -174,11 +193,12 @@ list : statement ';'
      ;
 
 statement: ID ASSIGN ID { 
-                          int isDefined = 0;
+                          int isDefined = 0, posVar1 = -1, posVar2 = -1;
                           char* typeVal1;
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
                               isDefined = 1;
+                              posVar1 = i;
                               allVariables[i].initialized = 1; 
                               typeVal1 = strdup(allVariables[i].type);
                             }
@@ -192,10 +212,13 @@ statement: ID ASSIGN ID {
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$3) == 0 ){
                               isDefined = 1;
+                              posVar2 = i;
                               if( allVariables[i].initialized == 0){
                                 printf("[Eroare] linia %d : %s nu a fost initializata\n", yylineno, $3 );
                                 YYERROR;
-                              }    
+                              }else{
+                                allVariables[posVar1].val = allVariables[posVar2].val;
+                              }
                             }
                           }
                           if(isDefined == 0){
@@ -222,12 +245,15 @@ statement: ID ASSIGN ID {
                             if( strcmp(allVariables[i].id,$1) == 0 ){
                               isDefined = 1;
                               allVariables[i].initialized = 1; 
+                              allVariables[i].val = $3;
                             }
                           }
                           if(isDefined == 0){
                             printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
                             YYERROR;
                           }
+
+                          //printf("[VAL] %s = %d\n", $1, $3);
 
                          }
          | FNCTID '(' ')'	{
@@ -311,7 +337,8 @@ statement: ID ASSIGN ID {
                           for(int i = 0; i < noVariable; i++){
                             if( strcmp(allVariables[i].id,$1) == 0 ){
                               isDefined = 1;
-                              allVariables[i].initialized = 1;     
+                              allVariables[i].initialized = 1; 
+                              allVariables[i].val = tempVal;    
                             }
                           }
                           if(isDefined == 0){
@@ -334,7 +361,24 @@ statement: ID ASSIGN ID {
                             YYERROR;
                           }
                          }
-         | PRNT '(' NR ')'
+         | PRNT '(' NR ')' { valPrint[noValPrint] = $3; noValPrint++; }
+         | PRNT '(' ID ')' { 
+                            int isDefined = 0;
+                            for(int i = 0; i < noVariable; i++){
+                              if( strcmp(allVariables[i].id,$3) == 0 ){
+                                isDefined = 1;
+                                if(allVariables[i].initialized == 1){
+                                  valPrint[noValPrint] = allVariables[i].val;
+                                  noValPrint++;
+                                }
+                              }
+                            }
+                            if(isDefined == 0){
+                              printf("[Eroare] linia %d : %s nu este definita\n",yylineno, $3);
+                              YYERROR;
+                            }
+                           }
+         | PRNT '(' operation ')' { valPrint[noValPrint] = tempVal; noValPrint++; }
          | STGOPP1 '(' STRG ')'
          | STGOPP1 '(' ID ')' { 
                           int isDefined = 0;
@@ -435,17 +479,14 @@ callList : ID {
                     }
                   }
                 }
-
                 if( ( isDefined == 1 ) && ( isInitialized == 0 ) ){
                   printf("[Eroare] linia %d : %s este definita dar nu a fost initializata\n", yylineno, $1);
                   YYERROR; 
                 }
-
                 if( isDefined == 0){
                     printf("[Eroare] linia %d : %s nu a fost definita\n", yylineno, $1);
                     YYERROR;
                 }
-                
               }
          | NR {
                 tempTypeFunct[tempNoParams] = numberType;
@@ -534,10 +575,34 @@ blockOfStatements : statement ';'
 expression : var OPPL var
            ;
 
-operation : var OPP var 
-          | var OPP operation
-          | '(' var OPP var ')'
-          | '(' var OPP operation ')'
+operation : var OPP var { 
+                          if( strcmp($2,"+") == 0 ){
+                            tempVal = $1 + $3;
+                          }
+                          if( strcmp($2,"-") == 0 ){
+                            tempVal = $1 - $3;
+                          }
+                          if( strcmp($2,"*") == 0 ){
+                            tempVal = $1 * $3;
+                          }
+                          if( strcmp($2,"/") == 0 ){
+                            tempVal = $1 / $3;
+                          }
+                        }
+          | operation OPP var{ 
+                              if( strcmp($2,"+") == 0 ){
+                                tempVal += $3;
+                              }
+                              if( strcmp($2,"-") == 0 ){
+                                tempVal -= $3;
+                              }
+                              if( strcmp($2,"*") == 0 ){
+                                tempVal *= $3;
+                              }
+                              if( strcmp($2,"/") == 0 ){
+                                tempVal /= $3;
+                              }
+                            }
           ;
 
 statementsForSwitch : CASE NR ':' statement ';'

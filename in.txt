@@ -47,6 +47,9 @@ intreg $matrice[5][5];
 incepem
 	$valoareIntreaga1 -> 33;
 	$valoareIntreaga2 -> 3 + 5;
+	$valoareIntreaga2 -> 2 - 5;
+	$valoareIntreaga2 -> 6 * 7;
+	$valoareIntreaga2 -> 9 / 8;
 	$valoareIntreaga1 -> $valoareIntreaga2 - 6;
 	$valoareIntreaga1 -> $valoareIntreaga1 / $valoareIntreaga2;
 
@@ -130,7 +133,12 @@ incepem
 	$a -> NEG($b < 213);
 	$b -> ($a > 213) SI (131 == 123);
 
-	$a -> 2 + ($b + 3424 - ($c / $a));
+	$a -> 4 + 2 * 8 / 5;
+	striga($a);
+	striga(331);
+	striga(4*5/2+8);
+
+	$a -> $c / $a - 3424 + $b + 2;
 
 	@functie1();
 

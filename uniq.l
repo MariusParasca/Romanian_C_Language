@@ -28,9 +28,9 @@
 "@"[_a-zA-Z][_a-zA-Z0-9]* {yylval.typefnct=strdup(yytext); return FNCTID;}
 "#"[_a-zA-Z][_a-zA-Z0-9]* {return CLSID;}
 "->" {return ASSIGN;}
-"+"|"-"|"*"|"/" {return OPP;}
+"+"|"-"|"*"|"/" {yylval.operation=strdup(yytext); return OPP;}
 "<"|">"|"=="|"!="|">="|"<=" {return OPPL;}
-[0-9]+ {return NR;}
+[0-9]+ {yylval.intval=atoi(yytext); return NR;}
 [ \t] ;
 \n {yylineno++;}
 . {return yytext[0];}
